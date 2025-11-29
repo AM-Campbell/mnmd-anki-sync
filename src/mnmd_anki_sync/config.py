@@ -79,7 +79,7 @@ class Config(BaseModel):
                 print(
                     f"Warning: Invalid config file {config_path}: {e}\n"
                     "Using default configuration.",
-                    file=sys.stderr
+                    file=sys.stderr,
                 )
 
         return cls()

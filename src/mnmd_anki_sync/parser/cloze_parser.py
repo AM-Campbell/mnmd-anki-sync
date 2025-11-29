@@ -19,12 +19,12 @@ from ..models import ClozeMatch, ClozeType, ScopeSpec
 
 # New regex pattern: capture structure, then parse content
 CLOZE_PATTERN = re.compile(
-    r'\{\{'
-    r'(?:(?P<ids>[^>{}]+)>)?'    # Optional IDs before > (don't match { or })
-    r'(?P<content>.+?)'           # Content (lazy match until }}) - allows nested braces
-    r'\}\}'
-    r'(?:\[(?P<scope>-?\d+(?:,\s*-?\d+)?)\])?',  # Optional scope
-    re.MULTILINE | re.DOTALL
+    r"\{\{"
+    r"(?:(?P<ids>[^>{}]+)>)?"  # Optional IDs before > (don't match { or })
+    r"(?P<content>.+?)"  # Content (lazy match until }}) - allows nested braces
+    r"\}\}"
+    r"(?:\[(?P<scope>-?\d+(?:,\s*-?\d+)?)\])?",  # Optional scope
+    re.MULTILINE | re.DOTALL,
 )
 
 
@@ -41,13 +41,13 @@ def normalize_whitespace(text: str) -> str:
     """
     # Replace single newlines (not followed/preceded by another newline) with space
     # First, protect double+ newlines by replacing them with a placeholder
-    result = re.sub(r'\n{2,}', '\x00PARA\x00', text)
+    result = re.sub(r"\n{2,}", "\x00PARA\x00", text)
     # Replace remaining single newlines with space
-    result = result.replace('\n', ' ')
+    result = result.replace("\n", " ")
     # Restore paragraph breaks
-    result = result.replace('\x00PARA\x00', '\n\n')
+    result = result.replace("\x00PARA\x00", "\n\n")
     # Collapse multiple spaces into one
-    result = re.sub(r' {2,}', ' ', result)
+    result = re.sub(r" {2,}", " ", result)
     return result
 
 
@@ -75,13 +75,13 @@ def parse_content(content_str: str) -> Tuple[str, Optional[str], Optional[str]]:
     extra = None
 
     # Check for extra (after <, runs to end, NO closing >)
-    if '<' in content_str:
-        before_extra, extra = content_str.split('<', 1)
+    if "<" in content_str:
+        before_extra, extra = content_str.split("<", 1)
         content_str = before_extra
 
     # Check for hint (after |)
-    if '|' in content_str:
-        answer, hint = content_str.split('|', 1)
+    if "|" in content_str:
+        answer, hint = content_str.split("|", 1)
     else:
         answer = content_str
 
@@ -119,12 +119,12 @@ def parse_cloze_ids(ids_str: str) -> Tuple[Optional[str], Optional[int], Optiona
     anki_id = None
 
     # Split by comma if present
-    parts = [p.strip() for p in ids_str.split(',')]
+    parts = [p.strip() for p in ids_str.split(",")]
 
     for part in parts:
-        if '.' in part:
+        if "." in part:
             # Sequence: "1.2" -> cloze_id="1", sequence_order=2
-            group, order = part.split('.', 1)
+            group, order = part.split(".", 1)
             cloze_id = group.strip()
             try:
                 sequence_order = int(order.strip())
@@ -164,7 +164,7 @@ def parse_scope(scope_str: Optional[str], in_list: bool = False) -> ScopeSpec:
     if not scope_str:
         return default
 
-    parts = [p.strip() for p in scope_str.split(',')]
+    parts = [p.strip() for p in scope_str.split(",")]
 
     try:
         if len(parts) == 1:
@@ -202,13 +202,13 @@ def find_closing_braces(text: str, start: int) -> Optional[int]:
     i = start
 
     while i < len(text):
-        if text[i] == '{':
+        if text[i] == "{":
             depth += 1
             i += 1
-        elif text[i] == '}':
+        elif text[i] == "}":
             depth -= 1
             # Check if this is the closing }} (need depth 0 and next char is also })
-            if depth == 1 and i + 1 < len(text) and text[i + 1] == '}':
+            if depth == 1 and i + 1 < len(text) and text[i + 1] == "}":
                 return i
             i += 1
         else:
@@ -233,7 +233,7 @@ def parse_clozes(text: str, start_line: int = 0, in_list: bool = False) -> List[
 
     while i < len(text) - 1:
         # Look for opening {{
-        if text[i:i+2] != '{{':
+        if text[i : i + 2] != "{{":
             i += 1
             continue
 
@@ -246,14 +246,14 @@ def parse_clozes(text: str, start_line: int = 0, in_list: bool = False) -> List[
             continue
 
         # Extract the full cloze text
-        full_text = text[start_pos:end_pos+2]
-        content_with_ids = text[start_pos+2:end_pos]
+        full_text = text[start_pos : end_pos + 2]
+        content_with_ids = text[start_pos + 2 : end_pos]
 
         # Check for scope after }}
         scope_str = None
         scope_end = end_pos + 2
-        if end_pos + 2 < len(text) and text[end_pos+2] == '[':
-            scope_match = re.match(r'\[(-?\d+(?:,\s*-?\d+)?)\]', text[end_pos+2:])
+        if end_pos + 2 < len(text) and text[end_pos + 2] == "[":
+            scope_match = re.match(r"\[(-?\d+(?:,\s*-?\d+)?)\]", text[end_pos + 2 :])
             if scope_match:
                 scope_str = scope_match.group(1)
                 scope_end = end_pos + 2 + len(scope_match.group(0))
@@ -262,10 +262,10 @@ def parse_clozes(text: str, start_line: int = 0, in_list: bool = False) -> List[
         # Parse IDs (before >)
         ids = None
         content = content_with_ids
-        if '>' in content_with_ids:
+        if ">" in content_with_ids:
             # Split at first > only if it's not in nested braces
             # For simplicity, assume > always separates IDs
-            parts = content_with_ids.split('>', 1)
+            parts = content_with_ids.split(">", 1)
             if len(parts) == 2:
                 ids = parts[0]
                 content = parts[1]

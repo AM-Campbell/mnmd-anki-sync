@@ -243,9 +243,7 @@ class AnkiConnectClient:
         """
         self.invoke("updateModelStyling", {"model": {"name": model_name, "css": css}})
 
-    def update_model_templates(
-        self, model_name: str, templates: Dict[str, Dict[str, str]]
-    ) -> None:
+    def update_model_templates(self, model_name: str, templates: Dict[str, Dict[str, str]]) -> None:
         """Update the card templates for a model.
 
         Args:

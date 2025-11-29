@@ -70,9 +70,7 @@ def _group_clozes(clozes: List[ClozeMatch]) -> Dict[str, ClozeGroup]:
             # Individual cloze without group
             group_id = f"_individual_{individual_counter}"
             individual_counter += 1
-            groups[group_id] = ClozeGroup(
-                group_id=group_id, clozes=[cloze], is_sequence=False
-            )
+            groups[group_id] = ClozeGroup(group_id=group_id, clozes=[cloze], is_sequence=False)
 
     return groups
 
@@ -110,7 +108,7 @@ def _generate_group_prompt(
                 # Grouped: use indexed placeholder - find index by start position
                 idx = next(
                     (i for i, gc in enumerate(group.clozes) if gc.start == cloze.start),
-                    0  # Default to 0 if not found (shouldn't happen, but safe)
+                    0,  # Default to 0 if not found (shouldn't happen, but safe)
                 )
                 replacement = f"__CLOZE_{idx}__"
             else:

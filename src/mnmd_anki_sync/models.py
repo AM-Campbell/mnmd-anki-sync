@@ -55,7 +55,9 @@ class ClozeMatch(BaseModel):
     start: int = Field(description="Start position in context")
     end: int = Field(description="End position in context")
     cloze_id: Optional[str] = Field(default=None, description="Group ID (e.g., '1' or 'poetry')")
-    sequence_order: Optional[int] = Field(default=None, description="Sequence order (e.g., 1, 2, 3)")
+    sequence_order: Optional[int] = Field(
+        default=None, description="Sequence order (e.g., 1, 2, 3)"
+    )
     anki_id: Optional[str] = Field(default=None, description="Base52 Anki note ID")
     answer: str = Field(description="The occluded text")
     hint: Optional[str] = Field(default=None, description="Hint text")
@@ -136,11 +138,10 @@ class Prompt(BaseModel):
             # Replace safe placeholder with Anki cloze syntax
             # Convert math in answer and hint
             answer = convert_math_to_anki(self.cloze_match.answer)
-            hint_text = f"::{convert_math_to_anki(self.cloze_match.hint)}" if self.cloze_match.hint else ""
-            return html_context.replace(
-                SAFE_PLACEHOLDER, f"{{{{c1::{answer}{hint_text}}}}}"
+            hint_text = (
+                f"::{convert_math_to_anki(self.cloze_match.hint)}" if self.cloze_match.hint else ""
             )
-
+            return html_context.replace(SAFE_PLACEHOLDER, f"{{{{c1::{answer}{hint_text}}}}}")
 
     model_config = ConfigDict(arbitrary_types_allowed=True)  # Allow Path type
 

@@ -92,9 +92,7 @@ class TestEnsureFileID:
 
     def test_adds_id_to_file_without_frontmatter(self):
         """Test adds ID to file without frontmatter."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".md", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write("# Test Content\n\nSome text here.")
             temp_path = Path(f.name)
 
@@ -117,9 +115,7 @@ class TestEnsureFileID:
 
     def test_adds_id_to_existing_frontmatter(self):
         """Test adds ID to existing frontmatter."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".md", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(
                 """---
 title: My Notes
@@ -151,9 +147,7 @@ author: Test User
     def test_does_not_modify_file_with_existing_id(self):
         """Test doesn't modify file that already has ID."""
         existing_id = "test1234"
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".md", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write(
                 f"""---
 mnmd_file_id: {existing_id}
@@ -179,9 +173,7 @@ mnmd_file_id: {existing_id}
 
     def test_stable_id_across_calls(self):
         """Test that same file gets same ID across multiple calls."""
-        with tempfile.NamedTemporaryFile(
-            mode="w", suffix=".md", delete=False
-        ) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
             f.write("# Test Content")
             temp_path = Path(f.name)
 

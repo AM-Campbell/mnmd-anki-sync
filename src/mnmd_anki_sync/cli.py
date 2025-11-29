@@ -55,9 +55,7 @@ def _preview_sync(files: List[Path], deck: Optional[str], config: Config) -> Non
 
         all_prompts = []
         for context in contexts:
-            context.cloze_matches = parse_clozes(
-                context.content, start_line=context.start_line
-            )
+            context.cloze_matches = parse_clozes(context.content, start_line=context.start_line)
             prompts = generate_prompts(context, file_path)
             all_prompts.extend(prompts)
 
@@ -104,14 +102,15 @@ def _preview_sync(files: List[Path], deck: Optional[str], config: Config) -> Non
         console.print(f"  Target deck: [cyan]{target_deck}[/cyan]")
         console.print(f"  Tags: [cyan]{', '.join(config.default_tags)}[/cyan]")
         console.print(
-            f"  Summary: [cyan]{new_count}[/cyan] new, "
-            f"[green]{existing_count}[/green] updates"
+            f"  Summary: [cyan]{new_count}[/cyan] new, " f"[green]{existing_count}[/green] updates"
         )
 
         total_new += new_count
         total_existing += existing_count
 
-    console.print(f"\n[bold]Total: {total_new} would be created, {total_existing} would be updated[/bold]")
+    console.print(
+        f"\n[bold]Total: {total_new} would be created, {total_existing} would be updated[/bold]"
+    )
 
 
 @app.command()
@@ -277,11 +276,7 @@ def syntax(
         # Use less for better navigation
         try:
             # Try to use less with color support
-            proc = subprocess.Popen(
-                ["less", "-R"],
-                stdin=subprocess.PIPE,
-                text=True
-            )
+            proc = subprocess.Popen(["less", "-R"], stdin=subprocess.PIPE, text=True)
             proc.communicate(input=content)
         except FileNotFoundError:
             # less not available, fall back to rich markdown

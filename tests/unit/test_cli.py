@@ -373,13 +373,19 @@ class TestSyntaxCommand:
 
         # Create a syntax file for the test
         syntax_content = "# Syntax Guide\n\nThis is the syntax guide."
-        syntax_file = Path(__file__).parent.parent.parent / "src" / "mnmd_anki_sync" / "syntax-notes.md"
+        syntax_file = (
+            Path(__file__).parent.parent.parent / "src" / "mnmd_anki_sync" / "syntax-notes.md"
+        )
 
         # If file doesn't exist, test should handle gracefully
         if not syntax_file.exists():
             result = runner.invoke(app, ["syntax", "--no-pager"])
             # Should show error about missing file
-            assert result.exit_code == 1 or "not found" in result.output.lower() or "Error" in result.output
+            assert (
+                result.exit_code == 1
+                or "not found" in result.output.lower()
+                or "Error" in result.output
+            )
         else:
             result = runner.invoke(app, ["syntax", "--no-pager"])
             # Should show content
@@ -452,7 +458,9 @@ class TestMultipleFiles:
             f1.flush()
             file_path1 = f1.name
 
-        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False, prefix="fail_") as f2:
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".md", delete=False, prefix="fail_"
+        ) as f2:
             f2.write(content)
             f2.flush()
             file_path2 = f2.name

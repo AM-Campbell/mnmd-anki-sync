@@ -78,7 +78,9 @@ def _extract_explicit_contexts(markdown_text: str) -> tuple[List[CardContext], S
             else:
                 # End of card context
                 if context_lines:
-                    context = _create_explicit_context(context_lines, context_start, i - 1, line_numbers)
+                    context = _create_explicit_context(
+                        context_lines, context_start, i - 1, line_numbers
+                    )
                     contexts.append(context)
                 in_context = False
                 context_start = None
@@ -87,7 +89,9 @@ def _extract_explicit_contexts(markdown_text: str) -> tuple[List[CardContext], S
 
     # Handle context at end of file
     if in_context and context_lines:
-        context = _create_explicit_context(context_lines, context_start, len(lines) - 1, line_numbers)
+        context = _create_explicit_context(
+            context_lines, context_start, len(lines) - 1, line_numbers
+        )
         contexts.append(context)
 
     return contexts, used_lines
@@ -131,7 +135,7 @@ def _extract_paragraph_contexts(markdown_text: str, exclude_lines: Set[int]) -> 
 
     # Create contexts for paragraphs containing clozes
     # Use DOTALL to match clozes that span lines (from text reflow)
-    cloze_pattern = re.compile(r'\{\{.+?\}\}', re.DOTALL)
+    cloze_pattern = re.compile(r"\{\{.+?\}\}", re.DOTALL)
 
     for para_lines, start, end in paragraphs:
         content = "\n".join(line for line, _ in para_lines)
@@ -151,7 +155,9 @@ def _extract_paragraph_contexts(markdown_text: str, exclude_lines: Set[int]) -> 
     return contexts
 
 
-def _create_explicit_context(lines: List[str], start: int, end: int, line_nums: List[int]) -> CardContext:
+def _create_explicit_context(
+    lines: List[str], start: int, end: int, line_nums: List[int]
+) -> CardContext:
     """Create CardContext from > ? block lines.
 
     Args:

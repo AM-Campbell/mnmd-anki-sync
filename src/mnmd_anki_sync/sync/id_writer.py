@@ -38,13 +38,13 @@ def write_ids_to_file(file_path: Path, prompts: List[Prompt]) -> None:
 
             # Skip if Anki ID already written (check if it appears before '>')
             # Parse the IDs portion (everything between {{ and > if present)
-            if '>' in cloze.full_text:
-                ids_portion = cloze.full_text.split('>', 1)[0].replace('{{', '')
+            if ">" in cloze.full_text:
+                ids_portion = cloze.full_text.split(">", 1)[0].replace("{{", "")
                 if cloze.anki_id in ids_portion:
                     continue  # Already has this Anki ID
             else:
                 # Basic cloze without group ID - check if ankiID is at start
-                if cloze.full_text.startswith('{{' + cloze.anki_id + '>'):
+                if cloze.full_text.startswith("{{" + cloze.anki_id + ">"):
                     continue  # Already has this Anki ID
 
             # Build new cloze text with Anki ID

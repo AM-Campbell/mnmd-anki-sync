@@ -18,13 +18,13 @@ def normalize_math_whitespace(math_content: str) -> str:
     """
     # Replace single newlines with nothing (they're just reflow artifacts)
     # First, protect double+ newlines (though rare in math)
-    result = re.sub(r'\n{2,}', '\x00PARA\x00', math_content)
+    result = re.sub(r"\n{2,}", "\x00PARA\x00", math_content)
     # Remove single newlines
-    result = result.replace('\n', ' ')
+    result = result.replace("\n", " ")
     # Restore any double newlines
-    result = result.replace('\x00PARA\x00', '\n\n')
+    result = result.replace("\x00PARA\x00", "\n\n")
     # Collapse multiple spaces
-    result = re.sub(r' {2,}', ' ', result)
+    result = re.sub(r" {2,}", " ", result)
     return result.strip()
 
 
@@ -49,18 +49,19 @@ def convert_math_to_anki(text: str) -> str:
         >>> convert_math_to_anki("$E =\\nmc^2$")  # reflowed
         '\\\\(E = mc^2\\\\)'
     """
+
     def replace_block_math(match):
         content = normalize_math_whitespace(match.group(1))
-        return f'\\[{content}\\]'
+        return f"\\[{content}\\]"
 
     def replace_inline_math(match):
         content = normalize_math_whitespace(match.group(1))
-        return f'\\({content}\\)'
+        return f"\\({content}\\)"
 
     # Convert block math first ($$...$$)
-    text = re.sub(r'\$\$(.+?)\$\$', replace_block_math, text, flags=re.DOTALL)
+    text = re.sub(r"\$\$(.+?)\$\$", replace_block_math, text, flags=re.DOTALL)
     # Convert inline math ($...$) - now allow newlines since we normalize them
-    text = re.sub(r'\$([^\$]+?)\$', replace_inline_math, text)
+    text = re.sub(r"\$([^\$]+?)\$", replace_inline_math, text)
     return text
 
 
@@ -108,12 +109,7 @@ def markdown_to_html(text: str) -> str:
         return placeholder
 
     # Match $$...$$ (block) or $...$ (inline) - allow newlines since we normalize them
-    text = re.sub(
-        r'\$\$(.+?)\$\$|\$([^\$]+?)\$',
-        save_math,
-        text,
-        flags=re.DOTALL
-    )
+    text = re.sub(r"\$\$(.+?)\$\$|\$([^\$]+?)\$", save_math, text, flags=re.DOTALL)
 
     # Step 2: Process markdown
     md = markdown.Markdown(

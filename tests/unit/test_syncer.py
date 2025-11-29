@@ -175,7 +175,9 @@ No clozes here.
 
     @patch("mnmd_anki_sync.sync.syncer.AnkiConnectClient")
     @patch("mnmd_anki_sync.sync.syncer.write_ids_to_file")
-    def test_sync_deletes_orphaned_notes(self, mock_write_ids, mock_client_class, config, sample_file):
+    def test_sync_deletes_orphaned_notes(
+        self, mock_write_ids, mock_client_class, config, sample_file
+    ):
         """Test syncing deletes orphaned notes."""
         mock_client = MagicMock()
         mock_client.model_names.return_value = ["MNMD Cloze"]
@@ -219,7 +221,9 @@ class TestSyncerErrorHandling:
 
     @patch("mnmd_anki_sync.sync.syncer.AnkiConnectClient")
     @patch("mnmd_anki_sync.sync.syncer.write_ids_to_file")
-    def test_sync_handles_add_note_failure(self, mock_write_ids, mock_client_class, config, sample_file):
+    def test_sync_handles_add_note_failure(
+        self, mock_write_ids, mock_client_class, config, sample_file
+    ):
         """Test syncing handles note creation failure."""
         mock_client = MagicMock()
         mock_client.model_names.return_value = ["MNMD Cloze"]

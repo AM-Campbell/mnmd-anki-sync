@@ -116,7 +116,7 @@ class TestMarkdownToHtml:
     def test_image(self):
         """Test image conversion."""
         result = markdown_to_html("![alt text](image.png)")
-        assert '<img' in result
+        assert "<img" in result
         assert 'alt="alt text"' in result
         assert 'src="image.png"' in result
 

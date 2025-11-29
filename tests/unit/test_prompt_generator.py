@@ -87,12 +87,22 @@ class TestGroupClozes:
     def test_group_sequence_clozes(self):
         """Test that sequence clozes are marked as such."""
         cloze1 = create_cloze(
-            "{{1.1>first}}", 0, 13, "first",
-            cloze_id="1", sequence_order=1, cloze_type=ClozeType.SEQUENCE
+            "{{1.1>first}}",
+            0,
+            13,
+            "first",
+            cloze_id="1",
+            sequence_order=1,
+            cloze_type=ClozeType.SEQUENCE,
         )
         cloze2 = create_cloze(
-            "{{1.2>second}}", 20, 34, "second",
-            cloze_id="1", sequence_order=2, cloze_type=ClozeType.SEQUENCE
+            "{{1.2>second}}",
+            20,
+            34,
+            "second",
+            cloze_id="1",
+            sequence_order=2,
+            cloze_type=ClozeType.SEQUENCE,
         )
 
         groups = _group_clozes([cloze1, cloze2])
@@ -126,6 +136,7 @@ class TestGenerateGroupPrompt:
         context = create_context(content, [cloze])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="_individual_0", clozes=[cloze], is_sequence=False)
 
         prompt = _generate_group_prompt(group, context, Path("/tmp/test.md"))
@@ -147,6 +158,7 @@ class TestGenerateGroupPrompt:
         context = create_context(content, [cloze1, cloze2])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="1", clozes=[cloze1, cloze2], is_sequence=False)
 
         prompt = _generate_group_prompt(group, context, Path("/tmp/test.md"))
@@ -163,6 +175,7 @@ class TestGenerateGroupPrompt:
         context = create_context(content, [])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="empty", clozes=[], is_sequence=False)
 
         prompt = _generate_group_prompt(group, context, Path("/tmp/test.md"))
@@ -172,13 +185,12 @@ class TestGenerateGroupPrompt:
     def test_other_clozes_shown_as_answers(self):
         """Test that clozes not in group are shown as answers."""
         content = "The {{1>cat}} chased the {{mouse}}."
-        cloze1 = create_cloze(
-            "{{1>cat}}", 4, 13, "cat", cloze_id="1", cloze_type=ClozeType.GROUPED
-        )
+        cloze1 = create_cloze("{{1>cat}}", 4, 13, "cat", cloze_id="1", cloze_type=ClozeType.GROUPED)
         cloze2 = create_cloze("{{mouse}}", 25, 34, "mouse")
         context = create_context(content, [cloze1, cloze2])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="1", clozes=[cloze1], is_sequence=False)
 
         prompt = _generate_group_prompt(group, context, Path("/tmp/test.md"))
@@ -194,20 +206,36 @@ class TestGenerateSequencePrompts:
         """Test generating prompts for sequence clozes."""
         content = "Steps: {{1.1>first}}, {{1.2>second}}, {{1.3>third}}."
         cloze1 = create_cloze(
-            "{{1.1>first}}", 7, 20, "first",
-            cloze_id="1", sequence_order=1, cloze_type=ClozeType.SEQUENCE
+            "{{1.1>first}}",
+            7,
+            20,
+            "first",
+            cloze_id="1",
+            sequence_order=1,
+            cloze_type=ClozeType.SEQUENCE,
         )
         cloze2 = create_cloze(
-            "{{1.2>second}}", 22, 36, "second",
-            cloze_id="1", sequence_order=2, cloze_type=ClozeType.SEQUENCE
+            "{{1.2>second}}",
+            22,
+            36,
+            "second",
+            cloze_id="1",
+            sequence_order=2,
+            cloze_type=ClozeType.SEQUENCE,
         )
         cloze3 = create_cloze(
-            "{{1.3>third}}", 38, 51, "third",
-            cloze_id="1", sequence_order=3, cloze_type=ClozeType.SEQUENCE
+            "{{1.3>third}}",
+            38,
+            51,
+            "third",
+            cloze_id="1",
+            sequence_order=3,
+            cloze_type=ClozeType.SEQUENCE,
         )
         context = create_context(content, [cloze1, cloze2, cloze3])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="1", clozes=[cloze1, cloze2, cloze3], is_sequence=True)
 
         prompts = _generate_sequence_prompts(group, context, Path("/tmp/test.md"))
@@ -233,20 +261,36 @@ class TestGenerateSequencePrompts:
         content = "{{1.3>third}} {{1.1>first}} {{1.2>second}}"
         # Deliberately out of order
         cloze3 = create_cloze(
-            "{{1.3>third}}", 0, 13, "third",
-            cloze_id="1", sequence_order=3, cloze_type=ClozeType.SEQUENCE
+            "{{1.3>third}}",
+            0,
+            13,
+            "third",
+            cloze_id="1",
+            sequence_order=3,
+            cloze_type=ClozeType.SEQUENCE,
         )
         cloze1 = create_cloze(
-            "{{1.1>first}}", 14, 27, "first",
-            cloze_id="1", sequence_order=1, cloze_type=ClozeType.SEQUENCE
+            "{{1.1>first}}",
+            14,
+            27,
+            "first",
+            cloze_id="1",
+            sequence_order=1,
+            cloze_type=ClozeType.SEQUENCE,
         )
         cloze2 = create_cloze(
-            "{{1.2>second}}", 28, 42, "second",
-            cloze_id="1", sequence_order=2, cloze_type=ClozeType.SEQUENCE
+            "{{1.2>second}}",
+            28,
+            42,
+            "second",
+            cloze_id="1",
+            sequence_order=2,
+            cloze_type=ClozeType.SEQUENCE,
         )
         context = create_context(content, [cloze3, cloze1, cloze2])
 
         from mnmd_anki_sync.models import ClozeGroup
+
         group = ClozeGroup(group_id="1", clozes=[cloze3, cloze1, cloze2], is_sequence=True)
 
         prompts = _generate_sequence_prompts(group, context, Path("/tmp/test.md"))
@@ -274,12 +318,8 @@ class TestGeneratePrompts:
     def test_generate_prompts_grouped(self):
         """Test generating prompts for grouped clozes (one prompt per group)."""
         content = "{{1>a}} and {{1>b}}."
-        cloze1 = create_cloze(
-            "{{1>a}}", 0, 7, "a", cloze_id="1", cloze_type=ClozeType.GROUPED
-        )
-        cloze2 = create_cloze(
-            "{{1>b}}", 12, 19, "b", cloze_id="1", cloze_type=ClozeType.GROUPED
-        )
+        cloze1 = create_cloze("{{1>a}}", 0, 7, "a", cloze_id="1", cloze_type=ClozeType.GROUPED)
+        cloze2 = create_cloze("{{1>b}}", 12, 19, "b", cloze_id="1", cloze_type=ClozeType.GROUPED)
         context = create_context(content, [cloze1, cloze2])
 
         prompts = generate_prompts(context, Path("/tmp/test.md"))
@@ -293,16 +333,13 @@ class TestGeneratePrompts:
         """Test generating prompts for sequence clozes (one per step)."""
         content = "{{1.1>a}} {{1.2>b}} {{1.3>c}}."
         cloze1 = create_cloze(
-            "{{1.1>a}}", 0, 9, "a",
-            cloze_id="1", sequence_order=1, cloze_type=ClozeType.SEQUENCE
+            "{{1.1>a}}", 0, 9, "a", cloze_id="1", sequence_order=1, cloze_type=ClozeType.SEQUENCE
         )
         cloze2 = create_cloze(
-            "{{1.2>b}}", 10, 19, "b",
-            cloze_id="1", sequence_order=2, cloze_type=ClozeType.SEQUENCE
+            "{{1.2>b}}", 10, 19, "b", cloze_id="1", sequence_order=2, cloze_type=ClozeType.SEQUENCE
         )
         cloze3 = create_cloze(
-            "{{1.3>c}}", 20, 29, "c",
-            cloze_id="1", sequence_order=3, cloze_type=ClozeType.SEQUENCE
+            "{{1.3>c}}", 20, 29, "c", cloze_id="1", sequence_order=3, cloze_type=ClozeType.SEQUENCE
         )
         context = create_context(content, [cloze1, cloze2, cloze3])
 
@@ -330,12 +367,22 @@ class TestGeneratePrompts:
             "{{1>grouped2}}", 25, 39, "grouped2", cloze_id="1", cloze_type=ClozeType.GROUPED
         )
         seq1 = create_cloze(
-            "{{2.1>seq1}}", 40, 52, "seq1",
-            cloze_id="2", sequence_order=1, cloze_type=ClozeType.SEQUENCE
+            "{{2.1>seq1}}",
+            40,
+            52,
+            "seq1",
+            cloze_id="2",
+            sequence_order=1,
+            cloze_type=ClozeType.SEQUENCE,
         )
         seq2 = create_cloze(
-            "{{2.2>seq2}}", 53, 65, "seq2",
-            cloze_id="2", sequence_order=2, cloze_type=ClozeType.SEQUENCE
+            "{{2.2>seq2}}",
+            53,
+            65,
+            "seq2",
+            cloze_id="2",
+            sequence_order=2,
+            cloze_type=ClozeType.SEQUENCE,
         )
         context = create_context(content, [basic, grouped1, grouped2, seq1, seq2])
 

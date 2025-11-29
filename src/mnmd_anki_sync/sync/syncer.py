@@ -57,9 +57,7 @@ class Syncer:
         file_tag = get_file_tag(file_id)
 
         if id_added:
-            self.console.print(
-                f"[dim]Added file ID to {file_path.name}: {file_id}[/dim]"
-            )
+            self.console.print(f"[dim]Added file ID to {file_path.name}: {file_id}[/dim]")
 
         # Read file
         with open(file_path, "r", encoding="utf-8") as f:
@@ -76,9 +74,7 @@ class Syncer:
         all_prompts: List[Prompt] = []
         for context in contexts:
             # Parse clozes
-            context.cloze_matches = parse_clozes(
-                context.content, start_line=context.start_line
-            )
+            context.cloze_matches = parse_clozes(context.content, start_line=context.start_line)
 
             # Generate prompts
             prompts = generate_prompts(context, file_path)
@@ -171,9 +167,7 @@ class Syncer:
                 self.client.delete_notes(orphaned_note_ids)
                 stats["deleted"] = len(orphaned_note_ids)
         except Exception as e:
-            self.console.print(
-                f"[yellow]Warning: Could not detect orphaned cards: {e}[/yellow]"
-            )
+            self.console.print(f"[yellow]Warning: Could not detect orphaned cards: {e}[/yellow]")
 
         # Write Anki IDs back to file
         write_ids_to_file(file_path, all_prompts)
