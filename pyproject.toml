@@ -1,0 +1,100 @@
+[project]
+name = "mnmd-anki-sync"
+version = "0.1.0"
+description = "Sync mnemonic markdown files to Anki with rich cloze deletion syntax"
+readme = "README.md"
+license = "Apache-2.0"
+authors = [
+    { name = "Aidan McHold Campbell", email = "aidanmcholdcampbell@gmail.com" }
+]
+maintainers = [
+    { name = "Aidan McHold Campbell", email = "aidanmcholdcampbell@gmail.com" }
+]
+requires-python = ">=3.10"
+keywords = [
+    "anki",
+    "flashcards",
+    "spaced-repetition",
+    "markdown",
+    "cloze-deletion",
+    "learning",
+    "education",
+    "ankiconnect",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Education",
+    "Topic :: Text Processing :: Markup :: Markdown",
+    "Typing :: Typed",
+]
+dependencies = [
+    "typer[all]>=0.9.0",
+    "pydantic>=2.0.0",
+    "requests>=2.31.0",
+    "rich>=13.0.0",
+    "pyyaml>=6.0.0",
+    "markdown>=3.5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/am-campbell/mnmd-anki-sync"
+Documentation = "https://github.com/am-campbell/mnmd-anki-sync#readme"
+Repository = "https://github.com/am-campbell/mnmd-anki-sync.git"
+Issues = "https://github.com/am-campbell/mnmd-anki-sync/issues"
+Changelog = "https://github.com/am-campbell/mnmd-anki-sync/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.package-data]
+mnmd_anki_sync = ["*.md"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.12.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+    "types-requests>=2.31.0",
+    "types-pyyaml>=6.0.0",
+]
+
+[project.scripts]
+mnmd = "mnmd_anki_sync.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.8.19,<0.9.0"]
+build-backend = "uv_build"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+select = ["E", "F", "I", "N", "W"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=src/mnmd_anki_sync --cov-report=term-missing"
