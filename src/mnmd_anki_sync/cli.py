@@ -55,7 +55,7 @@ def _preview_sync(files: List[Path], deck: Optional[str], config: Config) -> Non
         all_prompts = []
         for context in contexts:
             context.cloze_matches = parse_clozes(context.content, start_line=context.start_line)
-            prompts = generate_prompts(context, file_path)
+            prompts = generate_prompts(context, file_path, full_document=content)
             all_prompts.extend(prompts)
 
         if not all_prompts:

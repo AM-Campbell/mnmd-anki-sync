@@ -76,8 +76,8 @@ class Syncer:
             # Parse clozes
             context.cloze_matches = parse_clozes(context.content, start_line=context.start_line)
 
-            # Generate prompts
-            prompts = generate_prompts(context, file_path)
+            # Generate prompts (pass full content for scope resolution)
+            prompts = generate_prompts(context, file_path, full_document=content)
             all_prompts.extend(prompts)
 
         if not all_prompts:

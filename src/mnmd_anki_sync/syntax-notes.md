@@ -7,23 +7,14 @@ DESCRIPTION
        Mnemonic Markdown (MNMD) is a syntax for embedding cloze deletions in
        markdown files. This tool syncs them to Anki as flashcards.
 
-CARD CONTEXTS
-       Cards are defined inside block quotes starting with "> ?":
-
-           > ?
-           > The capital of France is {{Paris}}.
-
-       Everything inside the "> ?" block becomes card content. Multiple cards
-       can exist in one file.
-
 BASIC CLOZE SYNTAX
        {{answer}}
               Creates a cloze deletion. The answer is hidden on the front,
-              shown on the back.
+              shown on the back. Any paragraph containing a cloze becomes a
+              flashcard automatically.
 
               Example:
-                  > ?
-                  > Water boils at {{100}} degrees Celsius.
+                  Water boils at {{100}} degrees Celsius.
 
               Front: Water boils at [...] degrees Celsius.
               Back:  Water boils at 100 degrees Celsius.
@@ -33,8 +24,7 @@ HINTS
               Add a hint shown on the card front inside the brackets.
 
               Example:
-                  > ?
-                  > The speed of light is {{299,792,458|in m/s}} m/s.
+                  The speed of light is {{299,792,458|in m/s}} m/s.
 
               Front: The speed of light is [...in m/s] m/s.
 
@@ -43,8 +33,7 @@ EXTRA INFORMATION
               Add extra info shown only on the card back. Note: no closing >.
 
               Example:
-                  > ?
-                  > Python's package manager is {{pip<PyPI has 400k+ packages}}.
+                  Python's package manager is {{pip<PyPI has 400k+ packages}}.
 
               Back shows: pip
                           PyPI has 400k+ packages
@@ -54,16 +43,14 @@ COMBINED SYNTAX
               Combine hints and extras.
 
               Example:
-                  > ?
-                  > Git's staging area is {{the index|preparation area<also called cache}}.
+                  Git's staging area is {{the index|preparation area<also called cache}}.
 
 GROUPED CLOZES
        {{id>answer}}
               Hide multiple items together using the same numeric ID.
 
               Example:
-                  > ?
-                  > Primary colors are {{1>red}}, {{1>blue}}, and {{1>yellow}}.
+                  Primary colors are {{1>red}}, {{1>blue}}, and {{1>yellow}}.
 
               Front: Primary colors are [...], [...], and [...].
               (All three hidden together, revealed together)
@@ -73,20 +60,17 @@ SEQUENCE CLOZES
               Create progressive reveals. Each card shows previous items.
 
               Example:
-                  > ?
-                  > The order of planets:
-                  > {{1.1>Mercury}}[-1]
-                  > {{1.2>Venus}}
-                  > {{1.3>Earth}}
+                  The order of planets:
+                  {{1.1>Mercury}}
+                  {{1.2>Venus}}
+                  {{1.3>Earth}}
 
               Creates 3 cards:
               Card 1: [...], Card 2: Mercury, [...], Card 3: Mercury, Venus, [...]
 
-              The [-1] scope modifier includes the paragraph before (see SCOPE).
-
 SCOPE MODIFIERS
        {{answer}}[-before,after]
-              Control how much context surrounds the cloze.
+              Include surrounding paragraphs in the card context.
 
               [-1]        Include 1 paragraph before
               [1]         Include 1 paragraph after
@@ -98,10 +82,23 @@ SCOPE MODIFIERS
               Example:
                   Context paragraph here.
 
-                  > ?
-                  > The answer is {{here}}[-1].
+                  The answer is {{here}}[-1].
 
               Card includes both the context paragraph and the cloze paragraph.
+
+EXPLICIT CONTEXT BLOCKS
+       > ?
+              Use block quotes starting with "> ?" to define multi-paragraph
+              card contexts explicitly. Useful when you want full control over
+              what content appears on the card.
+
+              Example:
+                  > ?
+                  > First paragraph of context.
+                  >
+                  > Second paragraph with {{cloze}}.
+
+              Everything inside the block becomes the card content.
 
 MATH SUPPORT
        LaTeX math is converted to Anki's format automatically.
@@ -110,8 +107,7 @@ MATH SUPPORT
        Block:   $$\int x dx$$      becomes \[\int x dx\]
 
        Example:
-           > ?
-           > Einstein's equation: {{$E = mc^2$}}.
+           Einstein's equation: {{$E = mc^2$}}.
 
        Math works in answers, hints, and surrounding text.
 
@@ -154,20 +150,21 @@ CONFIGURATION
 
 EXAMPLES
        Simple card:
-           > ?
-           > The mitochondria is {{the powerhouse of the cell}}.
+           The mitochondria is {{the powerhouse of the cell}}.
 
        Card with hint and extra:
-           > ?
-           > HTTP status 404 means {{Not Found|4xx = client error<RFC 7231}}.
+           HTTP status 404 means {{Not Found|4xx = client error<RFC 7231}}.
 
        Grouped cloze:
-           > ?
-           > DNA bases: {{1>Adenine}}, {{1>Thymine}}, {{1>Guanine}}, {{1>Cytosine}}.
+           DNA bases: {{1>Adenine}}, {{1>Thymine}}, {{1>Guanine}}, {{1>Cytosine}}.
 
        Math card:
-           > ?
-           > Area of a circle: {{$A = \pi r^2$|geometry}}.
+           Area of a circle: {{$A = \pi r^2$|geometry}}.
+
+       Scope modifier (include context paragraph):
+           Background info here.
+
+           The answer is {{here}}[-1].
 
 SEE ALSO
        mnmd sync --help
