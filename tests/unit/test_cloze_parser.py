@@ -1,8 +1,6 @@
 """Tests for cloze parser with CORRECT MNMD syntax."""
 
-import pytest
-
-from mnmd_anki_sync.models import ClozeType, ScopeSpec
+from mnmd_anki_sync.models import ClozeType
 from mnmd_anki_sync.parser.cloze_parser import parse_cloze_ids, parse_clozes, parse_scope
 
 

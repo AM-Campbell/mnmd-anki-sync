@@ -2,8 +2,6 @@
 
 from pathlib import Path
 
-import pytest
-
 from mnmd_anki_sync.anki.note_builder import build_note_fields
 from mnmd_anki_sync.config import Config, EditorProtocol
 from mnmd_anki_sync.models import ClozeMatch, ClozeType, Prompt, ScopeSpec

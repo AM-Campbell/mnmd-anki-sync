@@ -98,7 +98,7 @@ class Prompt(BaseModel):
         Returns:
             Anki-formatted cloze text (HTML)
         """
-        from .utils.markdown_utils import markdown_to_html, convert_math_to_anki
+        from .utils.markdown_utils import convert_math_to_anki, markdown_to_html
 
         context_text = self.context
 
@@ -127,10 +127,10 @@ class Prompt(BaseModel):
             return html_context
         else:
             # Single cloze - use simple placeholder
-            SAFE_PLACEHOLDER = "<span id='mnmd-cloze'></span>"
+            safe_placeholder = "<span id='mnmd-cloze'></span>"
 
             # Replace __CLOZE__ with safe placeholder
-            safe_context = context_text.replace("__CLOZE__", SAFE_PLACEHOLDER)
+            safe_context = context_text.replace("__CLOZE__", safe_placeholder)
 
             # Convert markdown to HTML
             html_context = markdown_to_html(safe_context)
@@ -141,7 +141,7 @@ class Prompt(BaseModel):
             hint_text = (
                 f"::{convert_math_to_anki(self.cloze_match.hint)}" if self.cloze_match.hint else ""
             )
-            return html_context.replace(SAFE_PLACEHOLDER, f"{{{{c1::{answer}{hint_text}}}}}")
+            return html_context.replace(safe_placeholder, f"{{{{c1::{answer}{hint_text}}}}}")
 
     model_config = ConfigDict(arbitrary_types_allowed=True)  # Allow Path type
 

@@ -3,8 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from mnmd_anki_sync.utils.file_id import (
     ensure_file_id,
     extract_file_id,

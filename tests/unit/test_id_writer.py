@@ -3,8 +3,6 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from mnmd_anki_sync.models import ClozeMatch, ClozeType, Prompt, ScopeSpec
 from mnmd_anki_sync.sync.id_writer import write_ids_to_file
 

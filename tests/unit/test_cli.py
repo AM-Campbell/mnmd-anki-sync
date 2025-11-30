@@ -4,13 +4,11 @@ import tempfile
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
 from typer.testing import CliRunner
 
 from mnmd_anki_sync import __version__
 from mnmd_anki_sync.cli import app
 from mnmd_anki_sync.config import EditorProtocol
-
 
 runner = CliRunner()
 
@@ -371,8 +369,7 @@ class TestSyntaxCommand:
         """Test syntax command without pager."""
         mock_stdout.isatty.return_value = False
 
-        # Create a syntax file for the test
-        syntax_content = "# Syntax Guide\n\nThis is the syntax guide."
+        # Check if syntax file exists
         syntax_file = (
             Path(__file__).parent.parent.parent / "src" / "mnmd_anki_sync" / "syntax-notes.md"
         )

@@ -1,6 +1,6 @@
 """MNMD Cloze note type for Anki."""
 
-from typing import Dict, List
+from typing import List
 
 from .client import AnkiConnectClient
 

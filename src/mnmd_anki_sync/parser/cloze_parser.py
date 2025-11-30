@@ -16,7 +16,6 @@ from typing import List, Optional, Tuple
 
 from ..models import ClozeMatch, ClozeType, ScopeSpec
 
-
 # New regex pattern: capture structure, then parse content
 CLOZE_PATTERN = re.compile(
     r"\{\{"

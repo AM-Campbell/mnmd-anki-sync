@@ -2,8 +2,6 @@
 
 from unittest.mock import MagicMock
 
-import pytest
-
 from mnmd_anki_sync.anki.note_type import (
     CARD_TEMPLATE,
     NOTE_TYPE_CSS,

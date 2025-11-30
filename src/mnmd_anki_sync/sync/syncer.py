@@ -10,7 +10,7 @@ from ..anki.client import AnkiConnectClient
 from ..anki.note_builder import build_note_fields
 from ..anki.note_type import NOTE_TYPE_NAME, ensure_note_type_exists
 from ..config import Config
-from ..models import CardContext, Prompt
+from ..models import Prompt
 from ..parser.cloze_parser import parse_clozes
 from ..parser.context_extractor import extract_card_contexts
 from ..parser.prompt_generator import generate_prompts

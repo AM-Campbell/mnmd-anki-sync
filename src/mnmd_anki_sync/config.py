@@ -4,7 +4,7 @@ import html
 import sys
 from enum import Enum
 from pathlib import Path
-from typing import List, Optional
+from typing import List
 
 import yaml
 from pydantic import BaseModel, Field

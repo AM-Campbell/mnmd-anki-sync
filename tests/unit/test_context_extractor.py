@@ -103,7 +103,10 @@ Regular text here.
 
     def test_paragraph_with_reflowed_cloze(self):
         """Test that paragraphs with reflowed clozes (spanning lines) are detected."""
-        text = "If $a, b$ and $c$ are numbers, then $a + (b + c)$ $=$ {{bLmOdcNU>$(a + b) +\nc$|associativity}}."
+        text = (
+            "If $a, b$ and $c$ are numbers, then $a + (b + c)$ $=$ "
+            "{{bLmOdcNU>$(a + b) +\nc$|associativity}}."
+        )
         contexts = extract_card_contexts(text)
 
         assert len(contexts) == 1

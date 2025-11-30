@@ -335,7 +335,7 @@ wheels = [
 
 [[package]]
 name = "mnmd-anki-sync"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "markdown" },

@@ -2,8 +2,6 @@
 
 from pathlib import Path
 
-import pytest
-
 from mnmd_anki_sync.models import CardContext, ClozeMatch, ClozeType, ScopeSpec
 from mnmd_anki_sync.parser.prompt_generator import (
     _generate_group_prompt,
