@@ -177,7 +177,7 @@ def _replace_clozes_in_text(
     # Build a set of full_text patterns for group clozes
     group_patterns = {cloze.full_text for cloze in group_clozes}
 
-    # Replace each cloze
+    # Replace known clozes from the context
     for cloze in all_clozes:
         if cloze.full_text in group_patterns:
             # This is a target cloze - replace with placeholder
@@ -196,6 +196,50 @@ def _replace_clozes_in_text(
         # Escape the pattern for regex and replace
         pattern = re.escape(cloze.full_text)
         result = re.sub(pattern, replacement, result, count=1)
+
+    # Clean up any remaining cloze syntax from OTHER contexts that got pulled
+    # in via scope expansion. Extract just the answer from {{...}} patterns.
+    result = _clean_remaining_cloze_syntax(result)
+
+    return result
+
+
+def _clean_remaining_cloze_syntax(text: str) -> str:
+    """Remove any remaining cloze syntax, replacing with just the answer.
+
+    This handles clozes from other contexts that got pulled in via scope expansion.
+
+    Args:
+        text: Text that may contain leftover {{...}} syntax
+
+    Returns:
+        Text with cloze syntax replaced by answers
+    """
+    import re
+
+    # Pattern to match cloze syntax and extract the answer
+    # Matches: {{optional_ids>answer|optional_hint<optional_extra}}[optional_scope]
+    # We want to extract just the answer part
+    def replace_cloze(match: re.Match) -> str:
+        content = match.group(1)
+
+        # Remove IDs prefix (anything before >)
+        if ">" in content:
+            content = content.split(">", 1)[1]
+
+        # Remove hint (after |)
+        if "|" in content:
+            content = content.split("|", 1)[0]
+
+        # Remove extra (after <)
+        if "<" in content:
+            content = content.split("<", 1)[0]
+
+        return content.strip()
+
+    # Match {{...}} with optional [...] scope after
+    pattern = r"\{\{(.+?)\}\}(?:\[-?\d+(?:,\s*-?\d+)?\])?"
+    result = re.sub(pattern, replace_cloze, text, flags=re.DOTALL)
 
     return result
 
@@ -303,5 +347,8 @@ def _replace_sequence_clozes_in_text(
 
         pattern = re.escape(cloze.full_text)
         result = re.sub(pattern, replacement, result, count=1)
+
+    # Clean up any remaining cloze syntax from OTHER contexts
+    result = _clean_remaining_cloze_syntax(result)
 
     return result

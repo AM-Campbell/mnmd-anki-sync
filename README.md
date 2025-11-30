@@ -18,7 +18,7 @@ Sync mnemonic markdown files to Anki with rich cloze deletion syntax.
 - **Editor links**: Open source files from Anki in VS Code, VSCodium, Neovim, or Obsidian
 - **Dry-run mode**: Preview changes before syncing with `--dry-run`
 - **Type-safe**: Built with Pydantic for robust data validation
-- **Well-tested**: 276 unit tests with 96% code coverage
+- **Well-tested**: 282 unit tests with 94% code coverage
 
 ## Installation
 
@@ -66,12 +66,12 @@ mnmd syntax
 3. Create a markdown file with cloze deletions:
 
 ```markdown
-> ?
-> The capital of France is {{Paris}}.
+The capital of France is {{Paris}}.
 
-> ?
-> My favorite languages are {{1>Python}} and {{1>Rust}}.
+My favorite languages are {{1>Python}} and {{1>Rust}}.
 ```
+
+Any paragraph containing `{{...}}` becomes a flashcard automatically.
 
 4. Sync to Anki:
 
@@ -81,65 +81,63 @@ mnmd sync myfile.md --deck "My Deck"
 
 ## Syntax Guide
 
-See [syntax-notes.md](syntax-notes.md) for complete syntax documentation.
+Run `mnmd syntax` to view the complete syntax documentation, or see below for quick examples.
 
 ### Basic Cloze
 ```markdown
-> ?
-> The capital of France is {{Paris}}.
+The capital of France is {{Paris}}.
 ```
 Creates one card with "The capital of France is [...]"
 
 ### Grouped Cloze
 ```markdown
-> ?
-> My favorite languages are {{1>Python}} and {{1>Rust}}.
+My favorite languages are {{1>Python}} and {{1>Rust}}.
 ```
 Both items are hidden together on the same card: "My favorite languages are [...] and [...]"
 
 ### Sequence Cloze
 ```markdown
-> ?
-> My Haiku:
-> {{1.1>I want to write an}}[-1]
-> {{1.2>Example poem for you}}
-> {{1.3>Hopefully helpful}}
+Steps to make coffee:
+{{1.1>Grind beans}}
+{{1.2>Add hot water}}
+{{1.3>Wait and enjoy}}
 ```
-Creates progressive reveal: first line hidden, then second, then third
+Creates progressive reveal: first step hidden, then second, then third
 
 ### Hints and Extras
 ```markdown
-> ?
-> Python is a {{dynamically typed|type checking happens at runtime}} language.
-> The package manager is {{pip<PyPI hosts over 400,000 packages}}.
+Python is a {{dynamically typed|type checking happens at runtime}} language.
+The package manager is {{pip<PyPI hosts over 400,000 packages}}.
 ```
-- `|hint` adds hint text shown on card back
-- `<extra` adds extra information (no closing `>`)
+- `|hint` adds hint text shown on card front
+- `<extra` adds extra information shown on card back
 - Combine: `{{answer|hint<extra}}`
 
 ### Math Support
 ```markdown
-> ?
-> Einstein's equation: {{$E = mc^2$}}
-> The quadratic formula: {{$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$|solves ax² + bx + c = 0}}
+Einstein's equation: {{$E = mc^2$}}
 ```
-LaTeX math is automatically converted to Anki's format
+LaTeX math (`$inline$` and `$$block$$`) is automatically converted to Anki's format
 
-### Images
+### Scope Modifiers
+```markdown
+Context paragraph with background info.
+
+The answer is {{here}}[-1].
+```
+The `[-1]` includes the previous paragraph in the card context.
+- `[-1]` = include 1 paragraph before
+- `[1]` = include 1 paragraph after
+- `[-1,1]` = include 1 before and 1 after
+
+### Explicit Context Blocks (Optional)
 ```markdown
 > ?
-> The Python logo: ![Python](./images/python-logo.png)
+> Use block quotes starting with "> ?" when you want
+> full control over multi-paragraph card content.
+> The cloze is {{here}}.
 ```
-Standard markdown images work in Anki cards
-
-### Scope Control
-```markdown
-{{text}}[-1,2]
-```
-Include 1 paragraph before, 2 after. Default is current paragraph only.
-- Negative numbers = paragraphs before
-- Positive numbers = paragraphs after
-- Lists default to `[-1]` (include paragraph before)
+This is optional - paragraphs with clozes work automatically.
 
 ## CLI Commands
 

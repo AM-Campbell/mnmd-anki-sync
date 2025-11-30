@@ -118,3 +118,28 @@ After paragraph."""
         # The prompt should include the full block content
         assert "Context is defined here." in prompts[0].context
         assert "__CLOZE__" in prompts[0].context
+
+    def test_scope_cleans_other_cloze_syntax(self):
+        """Test that scope expansion cleans up cloze syntax from other paragraphs."""
+        text = """Paragraph {{one}}.
+
+Paragraph {{two}}[-1]."""
+
+        contexts = extract_card_contexts(text)
+        # Should have 2 contexts (two paragraphs with clozes)
+        assert len(contexts) == 2
+
+        # Process the second context (the one with [-1] scope)
+        for ctx in contexts:
+            ctx.cloze_matches = parse_clozes(ctx.content, start_line=ctx.start_line)
+
+        # Find the context with the [-1] scope
+        second_ctx = next(c for c in contexts if any(m.scope.before != 0 for m in c.cloze_matches))
+
+        prompts = generate_prompts(second_ctx, Path("/test.md"), full_document=text)
+        assert len(prompts) == 1
+
+        # The expanded context should show "one" as plain text, not {{one}}
+        assert "Paragraph one." in prompts[0].context
+        assert "{{one}}" not in prompts[0].context
+        assert "__CLOZE__" in prompts[0].context
