@@ -7,7 +7,6 @@ from typing import List, Optional
 
 import typer
 from rich.console import Console
-from rich.markdown import Markdown
 
 from . import __version__
 from .config import Config, EditorProtocol
@@ -267,23 +266,22 @@ def syntax(
     if not syntax_file.exists():
         console.print("[red]Error: syntax-notes.md not found[/red]")
         console.print("\nYou can find the documentation at:")
-        console.print("https://github.com/yourusername/mnmd-anki-sync/blob/main/syntax-notes.md")
+        console.print("https://github.com/am-campbell/mnmd-anki-sync")
         raise typer.Exit(1)
 
     content = syntax_file.read_text(encoding="utf-8")
 
     if pager and sys.stdout.isatty():
-        # Use less for better navigation
+        # Use less for better navigation (plain text, man-page style)
         try:
-            # Try to use less with color support
-            proc = subprocess.Popen(["less", "-R"], stdin=subprocess.PIPE, text=True)
+            proc = subprocess.Popen(["less"], stdin=subprocess.PIPE, text=True)
             proc.communicate(input=content)
         except FileNotFoundError:
-            # less not available, fall back to rich markdown
-            console.print(Markdown(content))
+            # less not available, print directly
+            console.print(content)
     else:
-        # No pager or not a TTY, use rich markdown rendering
-        console.print(Markdown(content))
+        # No pager or not a TTY, print directly
+        console.print(content)
 
 
 @app.command()
