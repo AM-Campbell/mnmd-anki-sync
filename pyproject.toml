@@ -1,6 +1,6 @@
 [project]
 name = "mnmd-anki-sync"
-version = "0.1.0"
+version = "0.1.1"
 description = "Sync mnemonic markdown files to Anki with rich cloze deletion syntax"
 readme = "README.md"
 license = "Apache-2.0"
